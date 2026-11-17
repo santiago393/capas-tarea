@@ -1,0 +1,12 @@
+1. ¿Por que es indispensable que el producto Sx * Sy sea aproximadamente 1.0 durante una deformacion?
+R=por que asi se permite mantener el tamaño visual del player ya que si se hace para abajo este de ensancharze 
+para mentener su forma
+
+2. ¿Que error grafico ocurre si se dibuja el sprite tomando como origen su centro en lugar de sus pies al aplicar Squash?
+R=El player parecera que flota por la deformacion 
+
+3. ¿Cual es la funcion cinestésica de la fase de anticipacion antes de la embestida?
+R=Sirve para mostrar que el player se prepara para atacar 
+
+4. ¿Por que la propiedad ctx.filter resulta superior a cargar imagenes estaticas adicionales de dano?
+R=Porque permite cambiar el color del player sin tener que hacer otra imagen
