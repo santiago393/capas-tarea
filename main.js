@@ -1,4 +1,7 @@
 import { Character } from "./character/character.js";
+import { SoundFX } from "./character/SoundFX.js";
+import { FeedbackManager } from "./character/FeedbackManager.js";
+import { BattleEngine } from "./character/BattleEngine.js";
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 const jugador = new Character({
@@ -22,25 +25,26 @@ const enemigo = new Character({
     isPlayer: false
 });
 let ultimoTiempo = 0;
-let hitstopTimer = 0;
-let golpeJugador = false;
-let golpeEnemigo = false;
+const sonido = new SoundFX();
+const feedback = new FeedbackManager(canvas, ctx);
+const batalla = new BattleEngine(jugador, enemigo, sonido, feedback);
 
-document.getElementById("btnAtaque").onclick = function() {
-if (jugador.attackProgress === -1) {
-    jugador.startAttackAnimation();
-    golpeJugador = false;
-    }
+const btnAtaque = document.getElementById("btnAtaque");
+const btnElectrico = document.getElementById("btnElectrico");
+const btnFuego = document.getElementById("btnFuego");
+    btnAtaque.onclick = function() {
+        batalla.startTurn("normal");
 };
-
-document.getElementById("btnDanio").onclick = function() {
-if (enemigo.attackProgress === -1) {
-    enemigo.startAttackAnimation();
-    golpeEnemigo = false;
-    }
+    btnElectrico.onclick = function() {
+        batalla.startTurn("electrico");
+};
+    btnFuego.onclick = function() {
+        batalla.startTurn("fuego");
 };
 function dibujar() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.save();
+    feedback.applyCameraShake();
     ctx.fillStyle = "#777";
     ctx.fillRect(0, 365, canvas.width, 5);
     jugador.draw(ctx);
@@ -49,27 +53,20 @@ function dibujar() {
     ctx.font = "20px Arial";
     ctx.fillText("Jugador: " + jugador.currentHp + " HP", 40, 40);
     ctx.fillText("Enemigo: " + enemigo.currentHp + " HP", 650, 40);
+    ctx.textAlign = "center";
+    ctx.fillText(batalla.message, canvas.width / 2, 90);
+    ctx.restore();
+feedback.drawScreenFlash();
 }
 function animar(tiempo) {
-    let dt = Math.min((tiempo - ultimoTiempo) / 1000, 0.05);
+let dt = Math.min((tiempo - ultimoTiempo) / 1000, 0.05);
     ultimoTiempo = tiempo;
-if (hitstopTimer > 0) {
-    hitstopTimer = Math.max(0, hitstopTimer - dt);
-} else {
-    jugador.update(dt);
-    enemigo.update(dt);
-if (jugador.attackProgress >= 0.5 && !golpeJugador) {
-    enemigo.takeDamage(10);
-    golpeJugador = true;
-    hitstopTimer = 0.065;
-        }
-if (enemigo.attackProgress >= 0.5 && !golpeEnemigo) {
-    jugador.takeDamage(10);
-    golpeEnemigo = true;
-    hitstopTimer = 0.065;
-        }
-    }
+    batalla.update(dt);
 dibujar();
+let bloqueado = batalla.state !== "PLAYER_SELECT";
+btnAtaque.disabled = bloqueado;
+btnElectrico.disabled = bloqueado;
+btnFuego.disabled = bloqueado;
 requestAnimationFrame(animar);
 }
 requestAnimationFrame(animar);

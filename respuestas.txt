@@ -10,3 +10,19 @@ R=Sirve para mostrar que el player se prepara para atacar
 
 4. ¿Por que la propiedad ctx.filter resulta superior a cargar imagenes estaticas adicionales de dano?
 R=Porque permite cambiar el color del player sin tener que hacer otra imagen
+
+
+Sesion 2
+1. ¿Por qué una sacudida de cámara sin decaimiento se percibe como un error del motor en vez de un impacto?
+R:Porque un impacto pierde fuerza poco a poco. 
+Si la cámara sigue vibrando con la misma intensidad, parece un error del juego en lugar de un golpe natural.
+
+2. ¿Qué restricción imponen los navegadores modernos sobre la reproducción de audio mediante AudioContext?
+R:Los navegadores necesitan que el usuario interactue primero con la pagina 
+
+3. ¿Qué función cumple el filtro pasa-bajas (lowpass) en el sonido de impacto?
+R: Reduce la frecuencia aguda y permite que destaquen los sonidos graves y medios
+
+4. ¿Por qué un combate por turnos requiere temporizadores explícitos entre el ataque y la respuesta del rival?
+R: Porque el juegador necesita tiempo para observar el ataque, los efectos y el daño
+causadp antes de que el enemigo responda 
